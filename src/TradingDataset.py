@@ -6,7 +6,7 @@ import os
 import torch
 
 
-class Dataset(Dataset):
+class TradingDataset(Dataset):
     def __init__(self, data_source: str, data_name: str):
         """
 
@@ -15,11 +15,11 @@ class Dataset(Dataset):
         """
         super().__init__()
         data_path = os.path.join(data_source, data_name + '.csv')
-        type = {'volume': torch.float16, 'high': torch.float16, 'close': torch.float16, 'low': torch.float16,
+        col_name_type = {'volume': torch.float16, 'high': torch.float16, 'close': torch.float16, 'low': torch.float16,
                 'open': torch.float16}
-        self.data = pd.read_csv(data_path, header=0, usecols=type.keys())
+        self.data = pd.read_csv(data_path, header=0, usecols=col_name_type.keys())
         self.x = self.data.iloc[:, 0:5].values
-        self.x = torch.tensor(self.x, dtype=torch.float16)
+        self.x = torch.tensor(self.x, dtype=torch.float32)
 
     def __getitem__(self, item):
         """
