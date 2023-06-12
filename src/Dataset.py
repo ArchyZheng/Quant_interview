@@ -3,6 +3,8 @@
 from torch.utils.data import Dataset
 import pandas as pd
 import os
+import torch
+
 
 class Dataset(Dataset):
     def __init__(self, data_source: str, data_name: str):
@@ -13,12 +15,23 @@ class Dataset(Dataset):
         """
         super().__init__()
         data_path = os.path.join(data_source, data_name + '.csv')
-        self.data = pd.read_csv(data_path, header=0)
+        type = {'volume': torch.float16, 'high': torch.float16, 'close': torch.float16, 'low': torch.float16,
+                'open': torch.float16}
+        self.data = pd.read_csv(data_path, header=0, usecols=type.keys())
+        self.x = self.data.iloc[:, 0:5].values
+        self.x = torch.tensor(self.x, dtype=torch.float16)
 
     def __getitem__(self, item):
-        return self.data[item]
+        """
+
+        :param item: the index of data
+        :return: the volume, high, close, low, open depending on index
+        """
+        return self.x[item]
 
     def __len__(self):
-        return len(self.data)
-# %%
-os.getcwd()
+        """
+
+        :return: the length of dataset
+        """
+        return len(self.x)
