@@ -15,23 +15,29 @@ class TradingDataset(Dataset):
         """
         super().__init__()
         data_path = os.path.join(data_source, data_name + '.csv')
-        col_name_type = {'volume': torch.float16, 'high': torch.float16, 'close': torch.float16, 'low': torch.float16,
-                'open': torch.float16}
+        col_name_type = {'volume': torch.float32, 'high': torch.float32, 'close': torch.float32, 'low': torch.float32,
+                         'open': torch.float32}
         self.data = pd.read_csv(data_path, header=0, usecols=col_name_type.keys())
-        self.x = self.data.iloc[:, 0:5].values
-        self.x = torch.tensor(self.x, dtype=torch.float32)
+        self.data = self.data.iloc[:, 0:5].values
+        self.data = torch.tensor(self.data, dtype=torch.float32)
 
     def __getitem__(self, item):
         """
 
-        :param item: the index of data
-        :return: the volume, high, close, low, open depending on index
+        :param item: the index of middle data
+        :return: the volume, high, close, low, open depending on index [mid - 20: mid], the output of yield rate
         """
-        return self.x[item]
+        left = item
+        mid = item + 20
+        right = item + 30
+        x = self.data[left:mid].reshape(-1, )
+        # the index of close: 2, the index of open: 4
+        y = (self.data[mid:right][2] - self.data[mid:right][4]) / self.data[mid:right][4]
+        return x, y
 
     def __len__(self):
         """
 
         :return: the length of dataset
         """
-        return len(self.x)
+        return len(self.data) - 30

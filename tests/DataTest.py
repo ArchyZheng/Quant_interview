@@ -15,7 +15,7 @@ class DataTests(unittest.TestCase):
         Test the length of dataset and output:
         """
         data_names = ['data_IC_15m', 'data_IF_15m']
-        data_length = [24928, 24928]
+        data_length = [24928 - 30, 24928 - 30]
         dataset_list = []
         data_source = '/Users/archy/PycharmProjects/trial_quant/data'
         for name in data_names:
@@ -24,7 +24,7 @@ class DataTests(unittest.TestCase):
 
         for index in range(2):
             self.assertEqual(len(dataset_list[index]), data_length[index])
-            pprint.pp(dataset_list[index].data.head(5))
+            pprint.pp(dataset_list[index].data[:5])
 
     def test_DatasetModule(self):
         """
@@ -33,7 +33,7 @@ class DataTests(unittest.TestCase):
         2. val_dataloader
 
         test the order of dataset:
-        1. print the first ten data
+        1. print the first ten data series
         """
         data_source = '/Users/archy/PycharmProjects/trial_quant/data'
         name_list = ['data_IC_15m', 'data_IF_15m']
@@ -44,7 +44,7 @@ class DataTests(unittest.TestCase):
 
         for dataset in dataset_list:
             datamodule = DatasetModule(dataset=dataset, batch_size=10)
-            datamodule.setup() # this is important for datamodule!
+            datamodule.setup()  # this is important for datamodule!
             train_dataloader = datamodule.train_dataloader()
             val_dataloader = datamodule.val_dataloader()
             pprint.pp("Train_dataloader:")
