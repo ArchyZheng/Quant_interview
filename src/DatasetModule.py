@@ -9,7 +9,7 @@ EVAL_DATALOADERS = DataLoader
 
 
 class DatasetModule(lightning.LightningDataModule):
-    def __init__(self, dataset: torch.utils.data.Dataset, batch_size: int):
+    def __init__(self, dataset, batch_size: int):
         super().__init__()
         self.train_dataset = None
         self.val_dataset = None
@@ -24,7 +24,7 @@ class DatasetModule(lightning.LightningDataModule):
                                                                        train_dataset_length + val_dataset_length))
 
     def train_dataloader(self) -> TRAIN_DATALOADERS:
-        return DataLoader(dataset=self.train_dataset, batch_size=self.batch_size, shuffle=False)
+        return DataLoader(dataset=self.train_dataset, batch_size=self.batch_size, shuffle=True, drop_last=True)
 
     def val_dataloader(self) -> EVAL_DATALOADERS:
-        return DataLoader(dataset=self.val_dataset, batch_size=self.batch_size, shuffle=False)
+        return DataLoader(dataset=self.val_dataset, batch_size=self.batch_size, shuffle=True, drop_last=True)

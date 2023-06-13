@@ -2,7 +2,6 @@ import pprint
 import unittest
 from src.TradingDataset import TradingDataset
 from src.DatasetModule import DatasetModule
-import os
 
 
 class DataTests(unittest.TestCase):
@@ -15,7 +14,7 @@ class DataTests(unittest.TestCase):
         Test the length of dataset and output:
         """
         data_names = ['data_IC_15m', 'data_IF_15m']
-        data_length = [24928 - 30, 24928 - 30]
+        data_length = [24928 - 30 * 16, 24928 - 30 * 16]
         dataset_list = []
         data_source = '/Users/archy/PycharmProjects/trial_quant/data'
         for name in data_names:
@@ -42,7 +41,7 @@ class DataTests(unittest.TestCase):
             dataset = TradingDataset(data_source=data_source, data_name=name)
             dataset_list.append(dataset)
 
-        for dataset in dataset_list:
+        for dataset in dataset_list:  # if test the dataloader, please switch the `shuffle` of dataloader.
             datamodule = DatasetModule(dataset=dataset, batch_size=10)
             datamodule.setup()  # this is important for datamodule!
             train_dataloader = datamodule.train_dataloader()
