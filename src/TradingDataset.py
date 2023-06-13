@@ -25,10 +25,6 @@ class TradingDataset(Dataset):
         self.for_testing = self.data['total_turnover'].head(5)
         self.for_testing = self.for_testing[:].values
         self.for_testing = torch.tensor(self.for_testing, dtype=torch.float32)
-
-        # Normalization for feature
-        for col_name in self.data.keys():
-            self.data[col_name] = self.data[col_name] / self.data[col_name].mean()
         self.data.rename(columns={'total_turnover': 'vwap'}, inplace=True)
 
         self.data = self.data.iloc[:, 0:6].values
@@ -44,10 +40,11 @@ class TradingDataset(Dataset):
         mid = item + 20 * 16
         right = item + 30 * 16
         x = self.data[left:mid].reshape(-1, 6)
+        x = x / x.mean(dim=0)
         x = (x - x.mean(dim=0)) / x.std(dim=0)  # had been tested!
         # the index of close: 2, the index of open: 5
         y = (self.data[mid:right][:, 2] - self.data[mid:right][:, 5]) / self.data[mid:right][:, 5]
-        y = (y - y.mean()) / y.std()
+        # y = (y - y.mean()) / y.std()  # 因为它是一个因子, 所以不必和真实的收益率直接挂钩
         return x, torch.sum(y)
 
     def __len__(self):

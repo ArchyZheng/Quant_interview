@@ -16,6 +16,6 @@ COPY config.yaml .
 RUN pip install -r requirements.txt
 RUN cd src
 RUN ls -al
-RUN python3 main.py --config config
+RUN bash
 
 ENTRYPOINT ["top", "-b"]
