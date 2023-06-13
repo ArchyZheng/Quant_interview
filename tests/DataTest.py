@@ -74,7 +74,7 @@ class DataTests(unittest.TestCase):
         dataset = TradingDataset(data_source=data_source, data_name=data_name)
         for i in range(5):
             self.assertEqual(dataset.for_testing[i], vwap[i])
-            # when index is 2, this test will fail. I think it may cause by precision of python
+            # when index is 2, this test will fail. I think it may cause by precision of python.
 
 
 if __name__ == '__main__':

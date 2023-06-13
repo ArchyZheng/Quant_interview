@@ -13,7 +13,7 @@ def main():
     parse = argparse.ArgumentParser()
     parse.add_argument('--config')
     args = parse.parse_args()
-    with open('./config.yaml', 'r') as stream:
+    with open(args.config, 'r') as stream:
         try:
             config = yaml.safe_load(stream)
         except:
