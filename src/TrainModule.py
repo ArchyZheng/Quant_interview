@@ -31,16 +31,17 @@ class TrainModule(pl.LightningModule):
     def training_step(self, train_batch, batch_idx):
         x, y = train_batch
 
-        h_0 = self.model.init_hidden(batch_size=self.batch_size)
+        h_0 = self.model.init_hidden(batch_size=self.batch_size).to(x.device)
         y_hat, _ = self.model(x, h_0)
         loss = self.loss(y_hat, y)
-        self.log('train_loss', loss)
+        self.log('train_loss', loss, on_epoch=True)
         return loss
 
     def validation_step(self, val_batch, batch_idx):
         x, y = val_batch
 
-        h_0 = self.model.init_hidden(batch_size=self.batch_size)
+        h_0 = self.model.init_hidden(batch_size=100).to(x.device)
         y_hat, _ = self.model(x, h_0)
         loss = self.loss(y_hat, y)
-        self.log('train_loss', loss)
+        self.log('validation_loss', loss, on_epoch=True)
+        return loss

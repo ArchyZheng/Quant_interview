@@ -27,4 +27,4 @@ class DatasetModule(lightning.LightningDataModule):
         return DataLoader(dataset=self.train_dataset, batch_size=self.batch_size, shuffle=True, drop_last=True)
 
     def val_dataloader(self) -> EVAL_DATALOADERS:
-        return DataLoader(dataset=self.val_dataset, batch_size=self.batch_size, shuffle=True, drop_last=True)
+        return DataLoader(dataset=self.val_dataset, batch_size=100, shuffle=True, drop_last=True)
