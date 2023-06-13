@@ -15,17 +15,27 @@ class TradingDataset(Dataset):
         """
         super().__init__()
         data_path = os.path.join(data_source, data_name + '.csv')
+        lot_size = {'data_IC_15m': 200, 'data_IF_15m': 300, 'data_IH_15m': 300, 'data_IM_15m': 200}
         col_name_type = {'volume': torch.float32, 'high': torch.float32, 'close': torch.float32, 'low': torch.float32,
-                         'open': torch.float32}
+                         'open': torch.float32, 'total_turnover': torch.float32}
         self.data = pd.read_csv(data_path, header=0, usecols=col_name_type.keys())
+        # Create VWAP
+        self.data['total_turnover'] = self.data['total_turnover'] / self.data['volume'] / lot_size[data_name]
+        # This part is created for testing vwap
+        self.for_testing = self.data['total_turnover'].head(5)
+        self.for_testing = self.for_testing[:].values
+        self.for_testing = torch.tensor(self.for_testing, dtype=torch.float32)
+
         # Normalization for feature
-        for col_name in col_name_type.keys():
+        for col_name in self.data.keys():
             self.data[col_name] = self.data[col_name] / self.data[col_name].mean()
             self.data[col_name] = (self.data[col_name] - self.data[col_name].mean()) / self.data[col_name].std()
+        self.data.rename(columns={'total_turnover': 'vwap'}, inplace=True)
+
 
         # TODO: Normalization for target, get the target mean and std
 
-        self.data = self.data.iloc[:, 0:5].values
+        self.data = self.data.iloc[:, 0:6].values
         self.data = torch.tensor(self.data, dtype=torch.float32)
 
     def __getitem__(self, item):
@@ -37,7 +47,7 @@ class TradingDataset(Dataset):
         left = item
         mid = item + 20 * 16
         right = item + 30 * 16
-        x = self.data[left:mid].reshape(-1, 5)
+        x = self.data[left:mid].reshape(-1, 6)
         # the index of close: 2, the index of open: 4
         y = (self.data[mid:right][:, 2] - self.data[mid:right][:, 4]) / self.data[mid:right][:, 4]
         return x, torch.sum(y)

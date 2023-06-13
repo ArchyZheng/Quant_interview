@@ -22,12 +22,12 @@ class ModelTest(unittest.TestCase):
         dataset_module.setup()
         train_dataloader = dataset_module.train_dataloader()
 
-        model = BaseGRUModel(input_size=5, hidden_size=30, num_layers=1, with_attention=False)
+        model = BaseGRUModel(input_size=6, hidden_size=30, num_layers=1, with_attention=False)
         h_0 = model.init_hidden(batch_size=5000)
         for input_feature, target in train_dataloader:
             prediction, _ = model(input_feature, h_0)
             self.assertEqual(prediction.shape, torch.Size([5000]))
-            self.assertEqual(input_feature.shape, torch.Size([5000, 320, 5]))
+            self.assertEqual(input_feature.shape, torch.Size([5000, 320, 6]))
             self.assertEqual(target.shape, torch.Size([5000]))
 
 
