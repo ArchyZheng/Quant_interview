@@ -11,7 +11,7 @@ from lightning.pytorch.loggers import CometLogger
 def main():
     # dataset part:
     BATCH_SIZE: int = 5000
-    data_source = '/Users/archy/PycharmProjects/trial_quant/data'
+    data_source = 'data'
     data_name = 'data_IC_15m'
     dataset = TradingDataset(data_source=data_source, data_name=data_name)
     data_module = DatasetModule(dataset=dataset, batch_size=BATCH_SIZE)
