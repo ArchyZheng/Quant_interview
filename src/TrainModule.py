@@ -22,7 +22,8 @@ class TrainModule(pl.LightningModule):
         super().__init__()
         self.batch_size = batch_size
         self.model = model
-        self.loss = ic_loss
+        # self.loss = ic_loss
+        self.loss = torch.nn.MSELoss
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.model.parameters(), lr=1e-3)
