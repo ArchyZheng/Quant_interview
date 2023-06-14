@@ -7,6 +7,7 @@ from src.Model import BaseGRUModel
 import pytorch_lightning as pl
 from lightning.pytorch.loggers import CometLogger
 import yaml
+from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 
 
 def main():
@@ -38,10 +39,13 @@ def main():
         api_key='lNyK4LLQynW9EQrhnWPWfvHTk',
         project_name=config['project_name']
     )
+    comet_logger.log_hyperparams(config)
 
     # START!!
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    trainer = pl.Trainer(logger=[comet_logger], max_epochs=config['max_epochs'], accelerator=device)
+    early_stop_callback = EarlyStopping(monitor="validation_loss", mode="min", patience=10)
+    trainer = pl.Trainer(logger=[comet_logger], callbacks=[early_stop_callback], max_epochs=config['max_epochs'],
+                         accelerator=device)
     trainer.fit(model=train_module, train_dataloaders=train_loader, val_dataloaders=val_loader)
     comet_logger.experiment.end()
 
