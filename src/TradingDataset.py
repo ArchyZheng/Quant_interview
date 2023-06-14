@@ -17,7 +17,7 @@ class TradingDataset(Dataset):
         data_path = os.path.join(data_source, data_name + '.csv')
         lot_size = {'data_IC_15m': 200, 'data_IF_15m': 300, 'data_IH_15m': 300, 'data_IM_15m': 200}
         col_name_type = {'volume': torch.float32, 'high': torch.float32, 'close': torch.float32, 'low': torch.float32,
-                         'open': torch.float32, 'total_turnover': torch.float32}
+                         'total_turnover': torch.float32, 'open': torch.float32, 'dominant_id': str}
         self.data = pd.read_csv(data_path, header=0, usecols=col_name_type.keys())
         # Create VWAP
         self.data['total_turnover'] = self.data['total_turnover'] / self.data['volume'] / lot_size[data_name]
@@ -25,8 +25,8 @@ class TradingDataset(Dataset):
         self.for_testing = self.data['total_turnover'].head(5)
         self.for_testing = self.for_testing[:].values
         self.for_testing = torch.tensor(self.for_testing, dtype=torch.float32)
-        self.data.rename(columns={'total_turnover': 'vwap'}, inplace=True)
 
+        self.data.rename(columns={'total_turnover': 'vwap'}, inplace=True)
         self.data = self.data.iloc[:, 0:6].values
         self.data = torch.tensor(self.data, dtype=torch.float32)
 

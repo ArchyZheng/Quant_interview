@@ -25,7 +25,7 @@ class TrainModule(pl.LightningModule):
         self.loss = ic_loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.model.parameters())
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=1e-3)
         return optimizer
 
     def training_step(self, train_batch, batch_idx):
@@ -34,7 +34,7 @@ class TrainModule(pl.LightningModule):
         h_0 = self.model.init_hidden(batch_size=self.batch_size).to(x.device)
         y_hat, _ = self.model(x, h_0)
         loss = self.loss(y_hat, y)
-        self.log('train_loss', loss, on_epoch=True)
+        self.log('train_loss', loss, on_epoch=True, on_step=False)
         return loss
 
     def validation_step(self, val_batch, batch_idx):

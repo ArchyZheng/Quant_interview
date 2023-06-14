@@ -30,7 +30,7 @@ def main():
     val_loader = data_module.val_dataloader()
 
     # model part:
-    model = BaseGRUModel(input_size=6, hidden_size=30, num_layers=1, with_attention=False)
+    model = BaseGRUModel(input_size=6, hidden_size=30, num_layers=3, with_attention=False)
     train_module = TrainModule(model=model, batch_size=BATCH_SIZE)
 
     # config the logger
@@ -41,7 +41,7 @@ def main():
 
     # START!!
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    trainer = pl.Trainer(logger=[comet_logger], max_epochs=100, accelerator=device)
+    trainer = pl.Trainer(logger=[comet_logger], max_epochs=config['max_epochs'], accelerator=device)
     trainer.fit(model=train_module, train_dataloaders=train_loader, val_dataloaders=val_loader)
     comet_logger.experiment.end()
 
