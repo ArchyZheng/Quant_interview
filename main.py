@@ -37,7 +37,8 @@ def main():
     # config the logger
     comet_logger = CometLogger(
         api_key='lNyK4LLQynW9EQrhnWPWfvHTk',
-        project_name=config['project_name']
+        project_name=config['project_name'],
+        experiment_name=config['experiment_name']
     )
     comet_logger.log_hyperparams(config)
 

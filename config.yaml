@@ -1,4 +1,5 @@
-project_name: 'Base GRU for 000001sz'
+project_name: 'Base GRU for 000001sz' # Ready for change
 data_name: '000001sz.csv'
 metadata: ['time', 'open', 'close', 'high', 'low', 'volume']
 max_epochs: 100
+experiment_name: 'not normalization for prediction' # Ready for change
