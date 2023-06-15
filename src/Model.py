@@ -28,7 +28,7 @@ class BaseGRUModel(nn.Module):
         self.FC = nn.Linear(self.hidden_dim, 1)
 
     def forward(self, previous_data: tensor, h) -> tensor:
-        output, h = self.GRU(previous_data, h)
+        output, h = self.GRU(previous_data.to(torch.float32), h) # Safe from bugs
         final_output = output[:, -1, :]
         output = self.BN(final_output)
         output = self.FC(output).reshape(-1, )

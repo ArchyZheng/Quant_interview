@@ -1,3 +1,4 @@
-project_name: 'BaseGRU'
-data_name: 'data_IC_15m'
-max_epochs: 500
+project_name: 'Base GRU for 000001sz'
+data_name: '000001sz.csv'
+metadata: ['time', 'open', 'close', 'high', 'low', 'volume']
+max_epochs: 100
