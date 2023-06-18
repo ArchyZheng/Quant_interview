@@ -12,17 +12,15 @@ class DataTests(unittest.TestCase):
     def test_Dataset_creation(self):
         """
 
-        Test 000001sz dataset:
-
         the length of dataset:
         1. assertEqual 38944 - 30 * 16
         """
-        data_source = '/Users/archy/PycharmProjects/trial_quant/data'
-        data_filename = '000001sz.csv'
-        metadata = ['time', 'open', 'close', 'high', 'low', 'volume']
+        data_source = '/Users/archy/PycharmProjects/quant_interview/data'
+        data_filename = 'data_IC_15m.csv'
+        metadata = ['datetime', 'open', 'close', 'high', 'low', 'volume']
 
         dataset = TradingDataset(data_source=data_source, data_filename=data_filename, metadata=metadata)
-        self.assertEqual(len(dataset), 38944 - 30 * 16)
+        self.assertEqual(len(dataset), 24928 - 30 * 16)
 
 
     def test_DatasetModule(self):
@@ -34,9 +32,9 @@ class DataTests(unittest.TestCase):
         test the order of dataset:
         1. print the first ten data series
         """
-        data_source = '/Users/archy/PycharmProjects/trial_quant/data'
-        data_filename = '000001sz.csv'
-        metadata = ['time', 'open', 'close', 'high', 'low', 'volume']
+        data_source = '/Users/archy/PycharmProjects/quant_interview/data'
+        data_filename = 'data_IC_15m.csv'
+        metadata = ['datetime', 'open', 'close', 'high', 'low', 'volume']
         dataset = TradingDataset(data_source=data_source, data_filename=data_filename, metadata=metadata)
 
         datamodule = DatasetModule(dataset=dataset, batch_size=10)

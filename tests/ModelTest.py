@@ -16,7 +16,7 @@ class ModelTest(unittest.TestCase):
         2. prediction: [5000]
         3. input: [5000, 320, 5]
         """
-        data_source = '/Users/archy/PycharmProjects/trial_quant/data'
+        data_source = '/Users/archy/PycharmProjects/quant_interview/data'
         metadata = ['time', 'open', 'close', 'high', 'low', 'volume']
         dataset = TradingDataset(data_source=data_source, data_filename='000001sz.csv', metadata=metadata)
         dataset_module = DatasetModule(dataset=dataset, batch_size=5000)
